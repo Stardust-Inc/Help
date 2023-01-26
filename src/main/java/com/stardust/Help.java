@@ -23,14 +23,14 @@ public final class Help extends JavaPlugin {
     private String[][][] basesInfo = {
         {
             {"?", "3 word summary"},
-            {"base", "View base stats"},
-            {"base define", "Select base diagonal endpoints"},
-            {"base defend", "Spawn troops to protect base."},
+            {"/base", "View base stats"},
+            {"/base define", "Select base diagonal endpoints"},
+            {"/base defend", "Spawn troops to protect base."},
         },
         {
-            {"base delete", "Deletes base"},
-            {"base save", "Saves base"},
-            {"base restore", "Restores base for 100 pieces of gold"}
+            {"/base delete", "Deletes base"},
+            {"/base save", "Saves base"},
+            {"/base restore", "Restores base for 100 pieces of gold"}
         }
     };
     
@@ -94,16 +94,18 @@ public final class Help extends JavaPlugin {
                 String pluginName = args[0];
                 if (pageNumber == null) pageNumber = Integer.parseInt(args[1]);
                 Book book = this.plugins.getOrDefault(pluginName, null);
-                if (book != null & pageNumber < book.size()) {
-                    responseMessage = this.combine(
-                        responseMessage, 
-                        book.getPage(
-                            pageNumber, 
-                            "/help " + pluginName + " " + (pageNumber - 1), 
-                            "/help " + pluginName + " " + (pageNumber + 1),
-                            true
-                        )
-                    );       
+                if (book != null) {
+                    if (pageNumber < book.size()) {
+                        responseMessage = this.combine(
+                            responseMessage, 
+                            book.getPage(
+                                pageNumber, 
+                                "/help " + pluginName + " " + (pageNumber - 1), 
+                                "/help " + pluginName + " " + (pageNumber + 1),
+                                true
+                            )
+                        );     
+                    }  
                 }
                 break;
             }

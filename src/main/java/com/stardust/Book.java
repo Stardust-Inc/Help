@@ -43,21 +43,21 @@ public class Book {
         pageText.add(this.getTitle());
 
         for (Integer i = 0; i < page.length; i++) {
-            String[] pluginCommand = page[i];
-            String pluginCommandName = pluginCommand[0];
-            if (pluginCommandName == "?") continue;
+            String[] content = page[i];
+            String subHeader = content[0];
+            if (subHeader == "?") continue;
 
-            String pluginCommandDescription = pluginCommand[1];
+            String contentHeader = content[1];
             
-            TextComponent commandMessage = new TextComponent("/" + pluginCommandName);
+            TextComponent commandMessage = new TextComponent(subHeader);
             // commandMessage.setUnderlined(true);
             
-            TextComponent commandDescription =  new TextComponent(" " + pluginCommandDescription + "\n");
-            commandDescription.setItalic(true);
-            commandDescription.setColor(this.colors[i % this.colors.length]);
+            TextComponent description =  new TextComponent(" " + contentHeader + "\n");
+            description.setItalic(true);
+            description.setColor(this.colors[i % this.colors.length]);
 
             pageText.add(commandMessage);
-            pageText.add(commandDescription);
+            pageText.add(description);
         }   
 
         if (showNavigation.length > 0) {
