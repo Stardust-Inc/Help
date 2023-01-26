@@ -79,12 +79,16 @@ public final class Help extends JavaPlugin {
                     String pluginName = plugin.getKey();
                     Book pluginBook = plugin.getValue();
 
-                    TextComponent message = new TextComponent("? [" + pluginName + "]");
+                    TextComponent message = new TextComponent(ChatColor.BOLD + "? [ " + pluginName + ChatColor.BOLD + " ]");
                     message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/help " + pluginName));
                     
-                    Text hoveredMessage = new Text(pluginBook.getDescription());
+                    Text hoveredMessage = new Text("Select");
                     message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoveredMessage));
                     responseMessage.add(message);
+                    
+                    TextComponent pluginDescription = new TextComponent(" " + pluginBook.getDescription() + "\n");
+                    pluginDescription.setColor(ChatColor.GRAY);
+                    responseMessage.add(pluginDescription);
                 }
                 break;
             }
