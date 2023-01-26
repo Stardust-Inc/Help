@@ -1,0 +1,7 @@
+main: com.stardust.Help
+name: Help
+version: 1.0
+commands:
+  help:
+    description: "Documentation commands"
+    usage: /help [command]
