@@ -33,9 +33,19 @@ public final class Help extends JavaPlugin {
             {"/base restore", "Restores base for 100 pieces of gold"}
         }
     };
+
+    private String[][][] raceInfo = {
+        {
+            {"?", "3 word summary"},
+            {"/race", "View player race info"},
+            {"/race select", "Selects a race"},
+            {"/race list", "Lists available races."},
+        }
+    };
     
     private Map<String, Book> plugins = Map.of(
-        "Bases", new Book(basesInfo, "Bases")
+        "Bases", new Book(basesInfo, "Bases"),
+        "Race", new Book(raceInfo, "Race")
     );
 
     private ChatColor headerColor = ChatColor.GOLD;
