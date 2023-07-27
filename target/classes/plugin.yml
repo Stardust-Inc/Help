@@ -1,4 +1,4 @@
-main: com.stardust.Help
+main: com.stardust.help.HelpPlugin
 name: Help
 version: 1.0
 commands:

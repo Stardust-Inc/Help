@@ -1,4 +1,4 @@
-package com.stardust;
+package com.stardust.help;
 
 import java.util.*;
 
@@ -17,14 +17,14 @@ public class Book {
 
     /** Representation */
     private String title = "";
-    private String[][][] book = {};
     private String description = "";
     private ChatColor headerColor = ChatColor.GOLD;
     private ChatColor[] colors = {ChatColor.AQUA, ChatColor.GREEN};
+    private ArrayList<ArrayList<ArrayList<String>>> book = new ArrayList<>();
 
-    public Book(String[][][] book, String title) {
+    public Book(ArrayList<ArrayList<ArrayList<String>>> book, String title) {
         this.book = book;
-        this.description = book[0][0][1];
+        this.description = book.get(0).get(0).get(1);
         this.title = title;
     }
 
@@ -38,16 +38,16 @@ public class Book {
      * @return a TextComponent rendering the current book page
      */
     public ArrayList<TextComponent> getPage(Integer pageNumber, String prevCommand, String nextCommand, Boolean... showNavigation) {
-        String[][] page = this.book[pageNumber];
+        ArrayList<ArrayList<String>> page = this.book.get(pageNumber);
         ArrayList<TextComponent> pageText = new ArrayList<>();
         pageText.add(this.getTitle());
 
-        for (Integer i = 0; i < page.length; i++) {
-            String[] content = page[i];
-            String subHeader = content[0];
-            if (subHeader == "?") continue;
+        for (Integer i = 0; i < page.size(); i++) {
+            ArrayList<String> content = page.get(i);
+            String subHeader = content.get(0);
+            if (subHeader.equals("?")) continue;
 
-            String contentHeader = content[1];
+            String contentHeader = content.get(1);
             
             TextComponent commandMessage = new TextComponent(subHeader);
             // commandMessage.setUnderlined(true);
@@ -110,6 +110,6 @@ public class Book {
         return navigateMessage;
     }
     
-    public Integer size() {return this.book.length;}
+    public Integer size() {return this.book.size();}
     public String getDescription() {return this.description;}
 }

@@ -1,10 +1,27 @@
-package com.stardust;
+package com.stardust.help;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import org.bukkit.*;
 import org.bukkit.help.HelpMap;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.plugin.PluginBase;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.plugin.PluginDescriptionFile;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -19,40 +36,77 @@ import org.bukkit.command.CommandSender;
 /**
  * Help Plugin
  */
-public final class Help extends JavaPlugin {
-    private String[][][] basesInfo = {
-        {
-            {"?", "3 word summary"},
-            {"/base", "View base stats"},
-            {"/base define", "Select base diagonal endpoints"},
-            {"/base defend", "Spawn troops to protect base."},
-        },
-        {
-            {"/base delete", "Deletes base"},
-            {"/base save", "Saves base"},
-            {"/base restore", "Restores base for 100 pieces of gold"}
-        }
-    };
-
-    private String[][][] raceInfo = {
-        {
-            {"?", "3 word summary"},
-            {"/race", "View player race info"},
-            {"/race select", "Selects a race"},
-            {"/race list", "Lists available races."},
-        }
-    };
-    
-    private Map<String, Book> plugins = Map.of(
-        "Bases", new Book(basesInfo, "Bases"),
-        "Race", new Book(raceInfo, "Race")
-    );
-
+public final class HelpPlugin extends JavaPlugin {
+    private Map<String, Book> plugins = new HashMap<>();
     private ChatColor headerColor = ChatColor.GOLD;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        final File dataFolder = getDataFolder();
+        final File configFile = new File(dataFolder + File.separator + "config.yml");
+        final File pluginsFolder = new File(dataFolder + File.separator + "plugins");
+
+        dataFolder.mkdir();
+        if (!pluginsFolder.isFile()) {
+            pluginsFolder.mkdir();
+            final File demoPlugin = new File(pluginsFolder + File.separator + "Demo.json");
+            
+            try {
+                demoPlugin.createNewFile();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(demoPlugin.getAbsoluteFile()));
+                writer.write("{\n\t\"PluginName\": [\n\t\t[\n\t\t\t[\"?\", \"plugin description goes here\"],\n\t\t\t[\"/demo\", \"this is the first command on the first page\"],\n\t\t\t[\"/demo command2\", \"this is another possible command\"]\n\t\t],\n\t\t[\n\t\t\t[\"/demo page2\", \"this is the first command on the second page\"],\n\t\t\t[\"/demo page3\", \"this is the second command on the second page\"]\n\t\t]\n\t]\n}");
+                writer.close();
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (File plugin : pluginsFolder.listFiles()) {
+            getLogger().info("Plugin " + plugin.getName());
+            JSONParser parser = new JSONParser();
+
+            try {     
+                Object obj = parser.parse(new FileReader(plugin.getAbsoluteFile()));
+                JSONObject jsonObject =  (JSONObject) obj;
+                Iterator<String> keys = jsonObject.keySet().iterator();
+                
+                
+                while(keys.hasNext()) {
+                    final String key = keys.next();
+                    final JSONArray pages = (JSONArray) jsonObject.get(key);
+                    final ArrayList<ArrayList<ArrayList<String>>> pluginList = new ArrayList<>();
+
+                    for (int i = 0; i < pages.size(); i++) {
+                        JSONArray page = (JSONArray) pages.get(i);
+                        ArrayList<ArrayList<String>> pagesList = new ArrayList<>();
+                        for (int j = 0; j < page.size(); j++) {
+                            JSONArray line = (JSONArray) page.get(j);
+                            ArrayList<String> lineList = new ArrayList<>();
+                            for (int k = 0; k < line.size(); k++) {
+                                String word = line.get(k).toString();
+                                lineList.add(word);
+                            }
+                            pagesList.add(lineList);
+                        }
+                        pluginList.add(pagesList);
+                    }
+                    
+                    plugins.put(key, new Book(pluginList, key));
+                }
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+    
+        }
+
         getLogger().info("Help enabled!");
         getCommand("help").setExecutor(this);
     }
