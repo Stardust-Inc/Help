@@ -16,4 +16,4 @@ with another folder named `plugins` with a demo plugin inside called `demo.json`
 Inside of this folder you can add json files for each plugin you want to document. 
 
 ### Demo
-![ezgif com-video-to-gif](https://github.com/Stardust-Inc/Help/assets/99296689/53045d9e-ab6c-41e6-a10a-0fa815dbf1a2)
+<img src="https://github.com/Stardust-Inc/Help/assets/99296689/5e2df62a-c986-4c01-9f27-403c37ae96ae" height="350px" />
