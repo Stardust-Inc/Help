@@ -48,7 +48,7 @@ public final class HelpPlugin extends JavaPlugin {
         final File pluginsFolder = new File(dataFolder + File.separator + "plugins");
 
         dataFolder.mkdir();
-        if (!pluginsFolder.isFile()) {
+        if (!pluginsFolder.isDirectory()) {
             pluginsFolder.mkdir();
             final File demoPlugin = new File(pluginsFolder + File.separator + "Demo.json");
             
