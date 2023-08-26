@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -122,7 +121,8 @@ public final class HelpPlugin extends JavaPlugin {
         if (!(sender instanceof Player)) return false;
         final Player player = (Player) sender;
         
-        this.clearChat(player);
+        // this.clearChat(player);
+        player.spigot().sendMessage(new TextComponent("\n"));
         ArrayList<TextComponent> responseMessage = new ArrayList<>();
 
         HelpMap helpMap = Bukkit.getServer().getHelpMap();

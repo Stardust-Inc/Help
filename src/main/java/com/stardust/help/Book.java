@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 
+
 /** A Book */
 public class Book {
     /**
@@ -40,7 +41,12 @@ public class Book {
     public ArrayList<TextComponent> getPage(Integer pageNumber, String prevCommand, String nextCommand, Boolean... showNavigation) {
         ArrayList<ArrayList<String>> page = this.book.get(pageNumber);
         ArrayList<TextComponent> pageText = new ArrayList<>();
-        pageText.add(this.getTitle());
+
+        TextComponent header = this.getBackArrow();
+        header.addExtra(this.getTitle());
+
+        pageText.add(header);
+        // pageText.add(this.getTitle());
 
         for (Integer i = 0; i < page.size(); i++) {
             ArrayList<String> content = page.get(i);
@@ -71,11 +77,24 @@ public class Book {
      * @return the title of the book as a TextComponent
      */
     public TextComponent getTitle() {
+
         TextComponent title = new TextComponent(this.title + "\n");
         title.setBold(true);
         title.setColor(this.headerColor);
         return title;
     }
+
+    public TextComponent getBackArrow() {
+        TextComponent backArrow = new TextComponent(ChatColor.BOLD + "<< ");
+        backArrow.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/help"));
+        
+        Text hoveredMessage = new Text("Back");
+        backArrow.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoveredMessage));
+
+        backArrow.setColor(this.headerColor);
+        return backArrow;
+    }
+
     /**
      * Converts the navigation of the book into a TextComponent to be displayed as a message
      * The navigation should be similar to < page x of n >
